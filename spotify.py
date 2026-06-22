@@ -208,7 +208,7 @@ with col_graf6:
     st.subheader("Energia vs. Positividade (Valence)")
     # tamanho do ponto = quantidade de streams
     fig6 = px.scatter(
-        df.sample(500),
+        df.sample(min(500,len(df))),
         x="energy_%",
         y="valence_%",
         size="streams",   

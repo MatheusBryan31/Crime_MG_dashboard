@@ -35,13 +35,15 @@ df["released_year"] = pd.to_numeric(
 # FILTRO LATERAL
 # =============================================================
 
+artistas = ["Todos"] + sorted(df["artist_name"].unique())
+
 artista = st.sidebar.selectbox(
     "Escolha um artista",
-    sorted(df["artist_name"].unique())
+    artistas
 )
 
-# Filtra o dataframe
-df = df[df["artist_name"] == artista]
+if artista != "Todos":
+    df = df[df["artist_name"] == artista]
 
 # =============================================================
 # CABECALHO DO DASHBOARD

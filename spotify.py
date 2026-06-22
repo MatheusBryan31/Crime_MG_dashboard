@@ -15,7 +15,8 @@ st.set_page_config(
 # Comentei a parte acima no dia 22/06/26 às 5:56
 
 # Le o CSV diretamente da internet e salva na variavel df
-df = pd.read_csv("Spotify-2023.csv")
+df = pd.read_csv("Spotify-2023.csv", encoding="cp1252")
+#st.write(df.columns)
 
 # Remove linhas onde a coluna streams esta vazia
 df = df.dropna(subset=["streams"])
@@ -153,26 +154,6 @@ with col_graf3:
 
     st.plotly_chart(fig3, use_container_width=True)
 
-    #Comentando o código de Suzana. O código acima eu reaproveitei.
-""" with col_graf3:
-    st.subheader("streams por Genero Musical")
-    #head(8) para mostrar apenas os 8 generos mais populares, o resto fica em "outros"
-    streams_por_genero = (
-        df.groupby("Genre")["streams"]
-        .sum()
-        .sort_values(ascending=False)
-        .head(8)           
-        .reset_index()
-    )
-
-    fig3 = px.pie(
-        streams_por_genero,
-        values="streams",
-        names="Genre"
-    )
-    st.plotly_chart(fig3, use_container_width=True) """
-    ##BRYAN##
-
 # GRAFICO 4: Relacao entre Danceability e streams
 # Tipo: grafico de dispersao (scatter) -> bom para ver correlacao entre dois numeros
 with col_graf4:
@@ -190,20 +171,6 @@ with col_graf4:
     )
 
     st.plotly_chart(fig4, use_container_width=True)
-#Fazendo o mesmo que fiz com o gráfico 3
-""" with col_graf4:
-    st.subheader("Danceability vs. streams")
-    #df.sample(500) para pegar apenas 500 pontos aleatorios, assim o grafico nao fica muito pesado
-    #Hover_data ao passar o mouse, mostra musica e artist_name
-    fig4 = px.scatter(
-        df.sample(500),   
-        x="Danceability",
-        y="streams",
-        color="Genre",
-        hover_data=["track_name", "artist_name"]   
-    )
-    st.plotly_chart(fig4, use_container_width=True) """
-
 
 # --- GRAFICO 5 e 6: terceira linha ---
 col_graf5, col_graf6 = st.columns(2)
@@ -258,13 +225,6 @@ top_musicas = (
     .head(10)
     .reset_index(drop=True)
 )
-# Adicionando a de cima e comentando a de baixo
-""" top_musicas = (
-    df[["track_name", "artist_name", "released_year", "streams", "Popularity"]]
-    .sort_values("streams", ascending=False)
-    .head(10)
-    .reset_index(drop=True)
-) """
 
 # Faz o indice comecar em 1 ao inves de 0
 top_musicas.index = top_musicas.index + 1

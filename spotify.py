@@ -209,8 +209,8 @@ with col_graf6:
     # tamanho do ponto = quantidade de streams
     fig6 = px.scatter(
         df.sample(500),
-        x="Energy",
-        y="Valence",
+        x="energy_%",
+        y="valence_%",
         size="streams",   
         color="released_year",
         hover_data=["track_name", "artist_name"]

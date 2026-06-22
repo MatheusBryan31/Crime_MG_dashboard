@@ -31,10 +31,10 @@ df["released_year"] = pd.to_numeric(df["released_year"], errors="coerce").astype
 # =============================================================
 # CABECALHO DO DASHBOARD
 # =============================================================
-st.title("Spotify Streaming Dashboard - Músicas mais ouvidas de 2010 a 2019")
-st.write("Explorando os dados de streaming do Spotify entre 2010 e 2019")
+st.title("Spotify Streaming DashBoard 2023")
+st.write("As mais ouvidas de 2023")
 st.markdown("---")
-st.dataframe(df, use_container_width=True)
+#st.dataframe(df, use_container_width=True)
 
 # =============================================================
 # KPIs - INDICADORES NUMERICOS EM DESTAQUE

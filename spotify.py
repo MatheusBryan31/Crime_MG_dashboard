@@ -87,13 +87,13 @@ with col_graf1:
     )
     st.plotly_chart(fig1, use_container_width=True)
 
-# GRAFICO 2: Top 10 artistas com mais streams
+# GRAFICO 2: Top 10 Artist_namea com mais streams
 # Tipo: grafico de barras horizontal -> bom para comparar categorias
 with col_graf2:
-    st.subheader("Top 10 Artistas por streams")
+    st.subheader("Top 10 Artist_name por streams")
     #ascending = True (# crescente para o grafico horizontal ficar certo)
-    top_artistas = (
-        df.groupby("Artist")["streams"]
+    top_Artist_name = (
+        df.groupby("Artist_name")["streams"]
         .sum()
         .sort_values(ascending=True)    
         .tail(10)
@@ -101,9 +101,9 @@ with col_graf2:
     )
     # orientation = "h" (grafico de barras horizontal)
     fig2 = px.bar(
-        top_artistas,
+        top_Artist_name,
         x="streams",
-        y="Artist",
+        y="Artist_name",
         orientation="h",
         text_auto=".2s"    
     )
@@ -138,13 +138,13 @@ with col_graf3:
 with col_graf4:
     st.subheader("Danceability vs. streams")
     #df.sample(500) para pegar apenas 500 pontos aleatorios, assim o grafico nao fica muito pesado
-    #Hover_data ao passar o mouse, mostra musica e artista
+    #Hover_data ao passar o mouse, mostra musica e Artist_name
     fig4 = px.scatter(
         df.sample(500),   
         x="Danceability",
         y="streams",
         color="Genre",
-        hover_data=["Song", "Artist"]   
+        hover_data=["Song", "Artist_name"]   
     )
     st.plotly_chart(fig4, use_container_width=True)
 
@@ -175,7 +175,7 @@ with col_graf6:
         y="Valence",
         size="streams",   
         color="released_year",
-        hover_data=["Song", "Artist"]
+        hover_data=["Song", "Artist_name"]
     )
     st.plotly_chart(fig6, use_container_width=True)
 
@@ -188,7 +188,7 @@ st.markdown("---")
 st.subheader("Top 10 Musicas por streams")
 
 top_musicas = (
-    df[["Song", "Artist", "Genre", "released_year", "streams", "Popularity"]]
+    df[["Song", "Artist_name", "Genre", "released_year", "streams", "Popularity"]]
     .sort_values("streams", ascending=False)
     .head(10)
     .reset_index(drop=True)

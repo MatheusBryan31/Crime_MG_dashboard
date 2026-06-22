@@ -17,13 +17,13 @@ st.set_page_config(
 # Le o CSV diretamente da internet e salva na variavel df
 df = pd.read_csv("Spotify-2023.csv")
 
-# Remove linhas onde a coluna Streams esta vazia
-df = df.dropna(subset=["Streams"])
+# Remove linhas onde a coluna streams esta vazia
+df = df.dropna(subset=["streams"])
 
-# Garante que Streams e um numero inteiro
-df["Streams"] = pd.to_numeric(df["Streams"], errors="coerce")
-df = df.dropna(subset=["Streams"])
-df["Streams"] = df["Streams"].astype(int)
+# Garante que streams e um numero inteiro
+df["streams"] = pd.to_numeric(df["streams"], errors="coerce")
+df = df.dropna(subset=["streams"])
+df["streams"] = df["streams"].astype(int)
 
 # Garante que Year e um numero inteiro
 df["Year"] = pd.to_numeric(df["Year"], errors="coerce").astype("Int64")
@@ -46,8 +46,8 @@ st.subheader("Indicadores Gerais")
 col1, col2, col3 = st.columns(3)   
 
 # KPI 1: Total de streams
-total_streams = df["Streams"].sum()
-col1.metric("Total de Streams", f"{total_streams / 1_000_000_000:.1f}B")
+total_streams = df["streams"].sum()
+col1.metric("Total de streams", f"{total_streams / 1_000_000_000:.1f}B")
 
 # KPI 2: Numero de musicas unicas
 total_musicas = df["Song"].nunique()
@@ -67,14 +67,14 @@ st.markdown("---")
 # --- GRAFICO 1 e 2: primeira linha ---
 col_graf1, col_graf2 = st.columns(2)
 
-# GRAFICO 1: Streams por ano (linha do tempo)
+# GRAFICO 1: streams por ano (linha do tempo)
 # Tipo: grafico de linha -> bom para mostrar tendencia ao longo do tempo
 with col_graf1:
-    st.subheader("Streams por Ano")
+    st.subheader("streams por Ano")
 
     # Agrupa os dados somando streams por ano
     streams_por_ano = (
-        df.groupby("Year")["Streams"]
+        df.groupby("Year")["streams"]
         .sum()
         .reset_index()
     )
@@ -82,7 +82,7 @@ with col_graf1:
     fig1 = px.line(
         streams_por_ano,
         x="Year",
-        y="Streams",
+        y="streams",
         markers=True        
     )
     st.plotly_chart(fig1, use_container_width=True)
@@ -90,10 +90,10 @@ with col_graf1:
 # GRAFICO 2: Top 10 artistas com mais streams
 # Tipo: grafico de barras horizontal -> bom para comparar categorias
 with col_graf2:
-    st.subheader("Top 10 Artistas por Streams")
+    st.subheader("Top 10 Artistas por streams")
     #ascending = True (# crescente para o grafico horizontal ficar certo)
     top_artistas = (
-        df.groupby("Artist")["Streams"]
+        df.groupby("Artist")["streams"]
         .sum()
         .sort_values(ascending=True)    
         .tail(10)
@@ -102,7 +102,7 @@ with col_graf2:
     # orientation = "h" (grafico de barras horizontal)
     fig2 = px.bar(
         top_artistas,
-        x="Streams",
+        x="streams",
         y="Artist",
         orientation="h",
         text_auto=".2s"    
@@ -116,10 +116,10 @@ col_graf3, col_graf4 = st.columns(2)
 # GRAFICO 3: Distribuicao de generos musicais
 # Tipo: grafico de pizza -> bom para mostrar proporcao entre categorias
 with col_graf3:
-    st.subheader("Streams por Genero Musical")
+    st.subheader("streams por Genero Musical")
     #head(8) para mostrar apenas os 8 generos mais populares, o resto fica em "outros"
     streams_por_genero = (
-        df.groupby("Genre")["Streams"]
+        df.groupby("Genre")["streams"]
         .sum()
         .sort_values(ascending=False)
         .head(8)           
@@ -128,21 +128,21 @@ with col_graf3:
 
     fig3 = px.pie(
         streams_por_genero,
-        values="Streams",
+        values="streams",
         names="Genre"
     )
     st.plotly_chart(fig3, use_container_width=True)
 
-# GRAFICO 4: Relacao entre Danceability e Streams
+# GRAFICO 4: Relacao entre Danceability e streams
 # Tipo: grafico de dispersao (scatter) -> bom para ver correlacao entre dois numeros
 with col_graf4:
-    st.subheader("Danceability vs. Streams")
+    st.subheader("Danceability vs. streams")
     #df.sample(500) para pegar apenas 500 pontos aleatorios, assim o grafico nao fica muito pesado
     #Hover_data ao passar o mouse, mostra musica e artista
     fig4 = px.scatter(
         df.sample(500),   
         x="Danceability",
-        y="Streams",
+        y="streams",
         color="Genre",
         hover_data=["Song", "Artist"]   
     )
@@ -173,7 +173,7 @@ with col_graf6:
         df.sample(500),
         x="Energy",
         y="Valence",
-        size="Streams",   
+        size="streams",   
         color="Year",
         hover_data=["Song", "Artist"]
     )
@@ -185,11 +185,11 @@ with col_graf6:
 # Mostra as 10 musicas com mais streams
 # =============================================================
 st.markdown("---")
-st.subheader("Top 10 Musicas por Streams")
+st.subheader("Top 10 Musicas por streams")
 
 top_musicas = (
-    df[["Song", "Artist", "Genre", "Year", "Streams", "Popularity"]]
-    .sort_values("Streams", ascending=False)
+    df[["Song", "Artist", "Genre", "Year", "streams", "Popularity"]]
+    .sort_values("streams", ascending=False)
     .head(10)
     .reset_index(drop=True)
 )

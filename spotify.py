@@ -116,6 +116,27 @@ col_graf3, col_graf4 = st.columns(2)
 # GRAFICO 3: Distribuicao de generos musicais
 # Tipo: grafico de pizza -> bom para mostrar proporcao entre categorias
 with col_graf3:
+    st.subheader("Top 10 Músicas Mais Ouvidas")
+
+    top_musicas = (
+        df.sort_values(
+            "streams",
+            ascending=False
+        )
+        .head(10)
+    )
+
+    fig3 = px.bar(
+        top_musicas,
+        x="streams",
+        y="track_name",
+        orientation="h"
+    )
+
+    st.plotly_chart(fig3, use_container_width=True)
+
+    #Comentando o código de Suzana. O código acima eu reaproveitei.
+""" with col_graf3:
     st.subheader("streams por Genero Musical")
     #head(8) para mostrar apenas os 8 generos mais populares, o resto fica em "outros"
     streams_por_genero = (
@@ -131,7 +152,8 @@ with col_graf3:
         values="streams",
         names="Genre"
     )
-    st.plotly_chart(fig3, use_container_width=True)
+    st.plotly_chart(fig3, use_container_width=True) """
+    ##BRYAN##
 
 # GRAFICO 4: Relacao entre Danceability e streams
 # Tipo: grafico de dispersao (scatter) -> bom para ver correlacao entre dois numeros

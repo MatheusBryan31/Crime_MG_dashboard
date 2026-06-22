@@ -225,12 +225,28 @@ with col_graf6:
 st.markdown("---")
 st.subheader("Top 10 Musicas por streams")
 
+
 top_musicas = (
-    df[["track_name", "artist_name", "released_year", "streams", "Popularity"]]
+    df[
+        [
+            "track_name",
+            "artist_name",
+            "released_year",
+            "streams",
+            "bpm"
+        ]
+    ]
     .sort_values("streams", ascending=False)
     .head(10)
     .reset_index(drop=True)
 )
+# Adicionando a de cima e comentando a de baixo
+""" top_musicas = (
+    df[["track_name", "artist_name", "released_year", "streams", "Popularity"]]
+    .sort_values("streams", ascending=False)
+    .head(10)
+    .reset_index(drop=True)
+) """
 
 # Faz o indice comecar em 1 ao inves de 0
 top_musicas.index = top_musicas.index + 1

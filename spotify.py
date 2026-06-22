@@ -53,9 +53,9 @@ col1.metric("Total de streams", f"{total_streams / 1_000_000_000:.1f}B")
 total_musicas = df["track_name"].nunique()
 col2.metric("Musicas Unicas", f"{total_musicas:,}")
 
-# KPI 3: Media de BPM (batidas por minuto)
-media_bpm = df["Bpm"].mean()
-col3.metric("BPM Medio", f"{media_bpm:.0f}")
+# KPI 3: Media de bpm (batidas por minuto)
+media_bpm = df["bpm"].mean()
+col3.metric("bpm Medio", f"{media_bpm:.0f}")
 
 st.markdown("---")
 
@@ -87,13 +87,13 @@ with col_graf1:
     )
     st.plotly_chart(fig1, use_container_width=True)
 
-# GRAFICO 2: Top 10 Artist_namea com mais streams
+# GRAFICO 2: Top 10 artist_namea com mais streams
 # Tipo: grafico de barras horizontal -> bom para comparar categorias
 with col_graf2:
-    st.subheader("Top 10 Artist_name por streams")
+    st.subheader("Top 10 artist_name por streams")
     #ascending = True (# crescente para o grafico horizontal ficar certo)
-    top_Artist_name = (
-        df.groupby("Artist_name")["streams"]
+    top_artist_name = (
+        df.groupby("artist_name")["streams"]
         .sum()
         .sort_values(ascending=True)    
         .tail(10)
@@ -101,9 +101,9 @@ with col_graf2:
     )
     # orientation = "h" (grafico de barras horizontal)
     fig2 = px.bar(
-        top_Artist_name,
+        top_artist_name,
         x="streams",
-        y="Artist_name",
+        y="artist_name",
         orientation="h",
         text_auto=".2s"    
     )
@@ -158,30 +158,46 @@ with col_graf3:
 # GRAFICO 4: Relacao entre Danceability e streams
 # Tipo: grafico de dispersao (scatter) -> bom para ver correlacao entre dois numeros
 with col_graf4:
+    st.subheader("Danceability vs Streams")
+
+    fig4 = px.scatter(
+        df.sample(min(500, len(df))),
+        x="danceability_%",
+        y="streams",
+        color="energy_%",
+        hover_data=[
+            "track_name",
+            "artist_name"
+        ]
+    )
+
+    st.plotly_chart(fig4, use_container_width=True)
+#Fazendo o mesmo que fiz com o gráfico 3
+""" with col_graf4:
     st.subheader("Danceability vs. streams")
     #df.sample(500) para pegar apenas 500 pontos aleatorios, assim o grafico nao fica muito pesado
-    #Hover_data ao passar o mouse, mostra musica e Artist_name
+    #Hover_data ao passar o mouse, mostra musica e artist_name
     fig4 = px.scatter(
         df.sample(500),   
         x="Danceability",
         y="streams",
         color="Genre",
-        hover_data=["track_name", "Artist_name"]   
+        hover_data=["track_name", "artist_name"]   
     )
-    st.plotly_chart(fig4, use_container_width=True)
+    st.plotly_chart(fig4, use_container_width=True) """
 
 
 # --- GRAFICO 5 e 6: terceira linha ---
 col_graf5, col_graf6 = st.columns(2)
 
-# GRAFICO 5: Distribuicao de BPM (histograma)
+# GRAFICO 5: Distribuicao de bpm (histograma)
 # Tipo: histograma -> bom para ver como os valores se distribuem
 with col_graf5:
-    st.subheader("Distribuicao de BPM")
-    #nbins = 30 (divide o eixo x em 30 "caixinhas" para contar quantas musicas tem em cada faixa de BPM)
+    st.subheader("Distribuicao de bpm")
+    #nbins = 30 (divide o eixo x em 30 "caixinhas" para contar quantas musicas tem em cada faixa de bpm)
     fig5 = px.histogram(
         df,
-        x="Bpm",
+        x="bpm",
         nbins=30           
     )
     st.plotly_chart(fig5, use_container_width=True)
@@ -197,7 +213,7 @@ with col_graf6:
         y="Valence",
         size="streams",   
         color="released_year",
-        hover_data=["track_name", "Artist_name"]
+        hover_data=["track_name", "artist_name"]
     )
     st.plotly_chart(fig6, use_container_width=True)
 
@@ -210,7 +226,7 @@ st.markdown("---")
 st.subheader("Top 10 Musicas por streams")
 
 top_musicas = (
-    df[["track_name", "Artist_name", "Genre", "released_year", "streams", "Popularity"]]
+    df[["track_name", "artist_name", "released_year", "streams", "Popularity"]]
     .sort_values("streams", ascending=False)
     .head(10)
     .reset_index(drop=True)

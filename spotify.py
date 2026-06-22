@@ -25,8 +25,8 @@ df["streams"] = pd.to_numeric(df["streams"], errors="coerce")
 df = df.dropna(subset=["streams"])
 df["streams"] = df["streams"].astype(int)
 
-# Garante que Year e um numero inteiro
-df["Year"] = pd.to_numeric(df["Year"], errors="coerce").astype("Int64")
+# Garante que released_year e um numero inteiro
+df["released_year"] = pd.to_numeric(df["released_year"], errors="coerce").astype("Int64")
 
 # =============================================================
 # CABECALHO DO DASHBOARD
@@ -74,14 +74,14 @@ with col_graf1:
 
     # Agrupa os dados somando streams por ano
     streams_por_ano = (
-        df.groupby("Year")["streams"]
+        df.groupby("released_year")["streams"]
         .sum()
         .reset_index()
     )
     # markers = True (mostra pontinhos em cada ano)
     fig1 = px.line(
         streams_por_ano,
-        x="Year",
+        x="released_year",
         y="streams",
         markers=True        
     )
@@ -174,7 +174,7 @@ with col_graf6:
         x="Energy",
         y="Valence",
         size="streams",   
-        color="Year",
+        color="released_year",
         hover_data=["Song", "Artist"]
     )
     st.plotly_chart(fig6, use_container_width=True)
@@ -188,7 +188,7 @@ st.markdown("---")
 st.subheader("Top 10 Musicas por streams")
 
 top_musicas = (
-    df[["Song", "Artist", "Genre", "Year", "streams", "Popularity"]]
+    df[["Song", "Artist", "Genre", "released_year", "streams", "Popularity"]]
     .sort_values("streams", ascending=False)
     .head(10)
     .reset_index(drop=True)

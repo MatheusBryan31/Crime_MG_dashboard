@@ -26,7 +26,22 @@ df = df.dropna(subset=["streams"])
 df["streams"] = df["streams"].astype(int)
 
 # Garante que released_year e um numero inteiro
-df["released_year"] = pd.to_numeric(df["released_year"], errors="coerce").astype("Int64")
+df["released_year"] = pd.to_numeric(
+    df["released_year"],
+    errors="coerce"
+).astype("Int64")
+
+# =============================================================
+# FILTRO LATERAL
+# =============================================================
+
+artista = st.sidebar.selectbox(
+    "Escolha um artista",
+    sorted(df["artist_name"].unique())
+)
+
+# Filtra o dataframe
+df = df[df["artist_name"] == artista]
 
 # =============================================================
 # CABECALHO DO DASHBOARD
@@ -51,7 +66,7 @@ col1.metric("Total de streams", f"{total_streams / 1_000_000_000:.1f}B")
 
 # KPI 2: Numero de musicas unicas
 total_musicas = df["track_name"].nunique()
-col2.metric("Musicas Unicas", f"{total_musicas:,}")
+col2.metric("Musicas Únicas", f"{total_musicas:,}")
 
 # KPI 3: Media de bpm (batidas por minuto)
 media_bpm = df["bpm"].mean()
@@ -130,6 +145,7 @@ with col_graf3:
         top_musicas,
         x="streams",
         y="track_name",
+        color="artist_name",
         orientation="h"
     )
 

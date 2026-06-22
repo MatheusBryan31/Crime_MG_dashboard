@@ -50,7 +50,7 @@ total_streams = df["streams"].sum()
 col1.metric("Total de streams", f"{total_streams / 1_000_000_000:.1f}B")
 
 # KPI 2: Numero de musicas unicas
-total_musicas = df["Song"].nunique()
+total_musicas = df["track_name"].nunique()
 col2.metric("Musicas Unicas", f"{total_musicas:,}")
 
 # KPI 3: Media de BPM (batidas por minuto)
@@ -144,7 +144,7 @@ with col_graf4:
         x="Danceability",
         y="streams",
         color="Genre",
-        hover_data=["Song", "Artist_name"]   
+        hover_data=["track_name", "Artist_name"]   
     )
     st.plotly_chart(fig4, use_container_width=True)
 
@@ -175,7 +175,7 @@ with col_graf6:
         y="Valence",
         size="streams",   
         color="released_year",
-        hover_data=["Song", "Artist_name"]
+        hover_data=["track_name", "Artist_name"]
     )
     st.plotly_chart(fig6, use_container_width=True)
 
@@ -188,7 +188,7 @@ st.markdown("---")
 st.subheader("Top 10 Musicas por streams")
 
 top_musicas = (
-    df[["Song", "Artist_name", "Genre", "released_year", "streams", "Popularity"]]
+    df[["track_name", "Artist_name", "Genre", "released_year", "streams", "Popularity"]]
     .sort_values("streams", ascending=False)
     .head(10)
     .reset_index(drop=True)
